@@ -1,0 +1,61 @@
+create initial availability array
+	for (date $date = now(); $date <= now() + 7 days; $date ++){
+		Arr[Day of $date]['date'] = $date;
+		Arr[Day of $date]['slotCount'] = 0;
+		Arr[Day of $date]['slots'] = array();
+	}
+
+get schedule list of $service
+	$scheduleList = $service->schedules();
+
+
+foreach $schedule on $scheduleList
+	if $schedule.isInfinite then
+		$startTime = $schedule.startTime
+		$endTime = $schedule.endTime
+		$duration = $service.duration
+		while $starTime <= $endTime
+			$untilTime = $startTime + $duration
+			if ($untilTime <= $endTime)
+				Add slot to availability array
+				Arr[$schedule.day]['slotCount']++
+				Arr[$schedule.day]['slots'][] = array ('startTime' = $startTime, 'endTime' = $untilTime,'duration' = $duration)
+				$startTime = $untilTime
+		endWhiile
+	else if $schedule.isRollingDays then
+		$rollingDays = $schedule.rollingDays
+		for ($ctr = 0; $ctr < $rollingDays and $ctr < 7; $ctr ++)
+			$date = now() + $ctr days
+			if ($schedule.day == $date.day){
+				$startTime = $schedule.startTime
+				$endTime = $schedule.endTime
+				$duration = $service.duration
+				while $starTime <= $endTime
+					$untilTime = $startTime + $duration
+					if ($untilTime <= $endTime)
+						Add slot to availability array
+						Arr[$schedule.day]['slotCount']++
+						Arr[$schedule.day]['slots'][] = array ('startTime' = $startTime, 'endTime' = $untilTime,'duration' = $duration)
+						$startTime = $untilTime
+				endWhiile
+			}
+		endfor
+	else if $schedule.isDateRange then
+		$startDate = $schedule.startDate
+		$endDate = $schedule.endDate
+		for ($date = now(); $date >= $startDate and $date <= $endDate and $date < now()+7days; $date += 1 day)
+			if ($schedule.day == $date.day){
+				$startTime = $schedule.startTime
+				$endTime = $schedule.endTime
+				$duration = $service.duration
+				while $starTime <= $endTime
+					$untilTime = $startTime + $duration
+					if ($untilTime <= $endTime)
+						Add slot to availability array
+						Arr[$schedule.day]['slotCount']++
+						Arr[$schedule.day]['slots'][] = array ('startTime' = $startTime, 'endTime' = $untilTime,'duration' = $duration)
+						$startTime = $untilTime
+				endWhiile
+			}
+	endif
+endforeach
