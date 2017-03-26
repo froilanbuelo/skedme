@@ -16,4 +16,10 @@ class Schedule extends Model
 	public function isInfinite(){
 		return $this->type == 'I';
 	}
+	public function isRollingDays(){
+        return $this->type == 'R';
+    }
+    public function isDateRange(){
+        return $this->type == 'D';
+    }
 }

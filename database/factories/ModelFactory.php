@@ -50,7 +50,7 @@ $factory->define(App\Schedule::class, function (Faker\Generator $faker) {
         'type' => $type,
         'rolling_days' => $rollingDays,
         'date_start' => $dateStart,
-        'date_end' => $dateStart,
+        'date_end' => $dateEnd,
         'time_start' => $faker->randomElement($array = array ('08:00:00','10:00:00','13:00:00')),
         'time_end' => $faker->randomElement($array = array ('15:00:00','17:00:00')),
         'day' => $faker->dayOfWeek(),

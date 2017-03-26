@@ -16,6 +16,15 @@ class Service extends Model
     public function getRouteKeyName(){
         return 'link';
     }
+    public function getServiceSchedules(){
+        if ($this->schedules()->count() > 0){
+            $schedules = $this->schedules;
+        }else{
+            $schedules = $this->user->schedules()->where('service_id', NULL)->get();;
+        }
+        return $schedules;
+    }
+    
     public function getWeekAvailability($startDate = null){
     	if (!$startDate){
     		$startDate = Carbon::now()->toDateString();
